@@ -17,7 +17,7 @@
 #
 # Requires sense_hat, PIL and urllib.request modeules to work
 # 
-# Use "sudo apt-get install sense-hat" To instal Sense Hat Modeule
+# Use "sudo apt-get install sense-hat" To instal Sense Hat Module
 
 from sense_hat import SenseHat 
 from PIL import Image
