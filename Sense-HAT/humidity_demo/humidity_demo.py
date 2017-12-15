@@ -15,7 +15,7 @@
 #
 # Version 0.1
 #
-# Use "sudo apt-get install sense-hat" To instal Sense Hat Modeule
+# Use "sudo apt-get install sense-hat" To instal Sense Hat Module
 # Use CTRL+C To exit the program
 
 from sense_hat import SenseHat 
