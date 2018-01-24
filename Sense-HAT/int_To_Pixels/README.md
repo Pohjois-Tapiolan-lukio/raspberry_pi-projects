@@ -1,4 +1,4 @@
-# Module to convert intigers (00-99) to pixel arrays which can be draw to Sense HAT modules 8x8 pixel screen. 
+# Module to convert intigers (00-99) to pixel arrays which can be drawn to Sense HAT modules 8x8 pixel screen. 
 **Put** `int_To_Pixels.py` in to your **project folder**.  
 **Use** `from int_To_Pixels import intToPixels` To **import** the module to your code.  
   
