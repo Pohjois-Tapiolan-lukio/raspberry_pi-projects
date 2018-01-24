@@ -6,7 +6,7 @@
 This **[example](https://github.com/Pohjois-Tapiolan-lukio/raspberry_pi-projects/blob/master/Sense-HAT/int_To_Pixels/example.py)** can be found at the **[github folder](https://github.com/Pohjois-Tapiolan-lukio/raspberry_pi-projects/tree/master/Sense-HAT/int_To_Pixels)**.  
   
 ```Python
-# Exaple to print number 50 to Sense HAT modules screen on red color 
+# Exaple to print number 50 to Sense HAT modules screen in red color 
 
 from sense_hat import SenseHat
 from int_To_Pixels import intToPixels
