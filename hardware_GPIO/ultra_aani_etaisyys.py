@@ -1,7 +1,7 @@
 #VCC an Pin 2 (VCC)
 #GND an Pin 6 (GND)
 #TRIG an Pin 12 (GPIO18)
-#ECHO 330 ohm vastuskytkenta
+#ECHO 330 ohm vastuskytkenta (GPIO24) ja  GND
 
 #Tuodaan kirjastot kayttoon
 import RPi.GPIO as GPIO
@@ -26,33 +26,33 @@ def etaisyys():
     time.sleep(0.00001)
     GPIO.output(GPIO_TRIGGER, False)
  
-    AloitusAika = time.time()
-    LopetusAika = time.time()
+    aloitus_aika = time.time()
+    lopetus_aika = time.time()
  
     #  tallenna AloitusAika
     while GPIO.input(GPIO_ECHO) == 0:
-        AloitusAika = time.time()
+        aloitus_aika = time.time()
  
     # tallenna LopetusAika
     while GPIO.input(GPIO_ECHO) == 1:
-        LopetusAika = time.time()
+        lopetus_aika = time.time()
  
     #  Aikaero
-    KulunutAika = LopetusAika - AloitusAika
+    kulunut_aika = lopetus_aika - aloitus_aika
     # Aanennopeus (34300 cm/s) 
     # jaetaan 2:lla , edestakaisin  
-    etaisyys = (KulunutAika * 34300) / 2
+    etaisyys = (kulunut_aika * 34300) / 2
  
     return etaisyys
  
 if __name__ == '__main__':
     try:
         while True:
-            MitattuEtaisyys = etaisyys()
-            print ("Mitattu etaisyys  {:.1f} cm".format(MitattuEtaisyys))
+            mitattu_etaisyys = etaisyys()
+            print ("Mitattu etaisyys  {:.1f} cm".format(mitattu_etaisyys))
             time.sleep(1)
  
-        # Keskeytys ctrl+C reset
+        # Keskeytys ctrl+C 
     except KeyboardInterrupt:
         print("Mittaus pysaytetty.")
         GPIO.cleanup()
