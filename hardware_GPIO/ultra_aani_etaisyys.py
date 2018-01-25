@@ -29,11 +29,11 @@ def etaisyys():
     aloitus_aika = time.time()
     lopetus_aika = time.time()
  
-    #  tallenna AloitusAika
+    #  tallenna aloitus_aika
     while GPIO.input(GPIO_ECHO) == 0:
         aloitus_aika = time.time()
  
-    # tallenna LopetusAika
+    # tallenna lopetus_aika
     while GPIO.input(GPIO_ECHO) == 1:
         lopetus_aika = time.time()
  
