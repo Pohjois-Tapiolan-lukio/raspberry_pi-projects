@@ -1,11 +1,11 @@
 '''
-asennus:
+Asennusohjeet:
 git clone https://github.com/adafruit/Adafruit_Python_DHT.git
 cd Adafruit_Python_DHT
 sudo python setup.py install
 
 Kaytossa DHT11 tai DHT22
-Anna GPIO NRO (koodisa 4)  
+Anna GPIO NRO (koodisa 4)
 '''
 import Adafruit_DHT
 import time
@@ -16,7 +16,7 @@ pin = 4
 
 def mittaus():
 	kosteus, lampotila = Adafruit_DHT.read_retry(sensor, pin)
-	return kosteus, lampotila 
+	return kosteus, lampotila
 
 if __name__ == '__main__':
 	try:
@@ -28,5 +28,4 @@ if __name__ == '__main__':
 				print("Mittaus ei onnistunut!")
 			time.sleep(1)
 	except KeyboardInterrupt:
-		print("lopetetaan mittaus!")
-		
+		print("Lopetetaan mittaus!")
