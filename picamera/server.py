@@ -17,9 +17,9 @@ def camera_capture():
 
 def send_to_telegram():
     with open('image.jpg', 'rb') as capture_file:
-        url = 'https://api.telegram.org/bot377314625:AAG24Zi05B23iLcipgAdlhNLqMgKDvtxmkg/sendPhoto'
+        url = 'https://api.telegram.org/bot<insert your token>/sendPhoto'
         f = {"photo": capture_file}
-        p = {'chat_id': 313967928}
+        p = {'chat_id': <your chat id>}
         res = requests.post(url, files=f, params=p)
 
 app.run(host="0.0.0.0")

@@ -15,8 +15,8 @@ import requests
 import picamera
 import os
 
-BOT_API_TOKEN ='377314625:AAG24Zi05B23iLcipgAdlhNLqMgKDvtxmkg'
-GROUP_ID = 313967928
+BOT_API_TOKEN =<Insert Yuor Api token>
+GROUP_ID = <insert your group id>
 TG_URL = 'https://api.telegram.org/bot'+ BOT_API_TOKEN
 
 app = Flask(__name__)
