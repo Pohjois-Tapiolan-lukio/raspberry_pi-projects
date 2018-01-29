@@ -10,10 +10,7 @@ class dial:
        #return '0'*(8-len(s)) + s 
 
     def get(self):
-	#reply_bytes = self.conn.xfer2([128, 0])
-        #reply_bitstring = ''.join(self.bitstring(n) for n in reply_bytes) 
-        time.sleep(0.01)
-	return  float(self.conn.readline())/1023
+	    return  float(self.conn.readline())/1023
 
 if __name__ == '__main__': 
 	dial=dial()
