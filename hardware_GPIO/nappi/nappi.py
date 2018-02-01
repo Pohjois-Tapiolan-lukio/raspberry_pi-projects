@@ -13,6 +13,7 @@ NAPPI_GPIO = 17 #  valitaan napille kaytettava portti
 LED_GPIO = 27 # valitaan  ledille portti
 GPIO.setmode(GPIO.BCM) # Tassa  asetetaan kayttoon GPIO numero.
 GPIO.setup(NAPPI_GPIO, GPIO.IN) # Asetetaan Nappi INPUT
+#GPIO.setmode(GPIO.BOARD) Jos kaytat fyysista pinnia 12
 GPIO.setup(LED_GPIO, GPIO.OUT) #Asetetaan led OUTPUT tilaan
  
 
