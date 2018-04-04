@@ -9,7 +9,7 @@ laukaisin = Button(4, pull_up = False)
 #Luodaan oma kamera kayttoon.
 camera = PiCamera()
 camera.resolution = (1024, 768) # aseta kuvan resoluutio
-camera.vflip = True #  kuvan kaanto, vflip=vertical flip, hflip= horizontal.. 
+camera.vflip = True #  kuvan kaanto, vflip=vertical flip, hflip= horizontal..
 try:
         camera.start_preview()
         sleep(3)
@@ -19,4 +19,4 @@ try:
         camera.close()
 
 except KeyboardInterrupt:
-    print("Lopetetaan ohjelma")
+        print("Lopetetaan ohjelma")
