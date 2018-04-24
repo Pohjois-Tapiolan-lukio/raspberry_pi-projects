@@ -1,3 +1,5 @@
+# Source: https://tutorials-raspberrypi.de/raspberry-pi-roboter-bausatz-zusammenbau/
+
 import RPi.GPIO as GPIO
 import time
 import threading
