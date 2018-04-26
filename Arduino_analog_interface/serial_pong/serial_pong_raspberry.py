@@ -8,14 +8,18 @@ Yleensa /dev/ttyACM0 !!
 import serial
 import time
 
-ser = serial.Serial("/dev/ttyACM2", 9600)
+ser = serial.Serial("/dev/ttyUSB0", 9600)
 
 try:
     while True:
         # Vastaanotetaan arduinon viesti
-        input_read_serial = ser.readline()
-        print(input_read_serial)
-        time.sleep(0.01)
+        serial_in = ser.readline()
+        print("Found message:", serial_in)
+        if "ping" in serial_in:
+            # Kun saadaan viesti jossa on "pong", lahetetaan "ping"
+            ser.write(b"pong")
+        time.sleep(0.5)
 except KeyboardInterrupt:
     # Ohjelman keskeytys
+    ser.close()
     print("Ohjelman suoritus paattyy")
