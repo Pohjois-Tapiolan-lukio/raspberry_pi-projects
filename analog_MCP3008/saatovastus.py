@@ -10,18 +10,18 @@ Pin19(MOSI)--> Pin11 (DIN)
 Pin 24 (CE0) --> Pin10 (CS/SHDN)
 Pin6(GND)-->Pin9(DGND)
 
-ulostulo valilla 0...1023
+output valilla 0...1
 '''
-from MCP3008 import MCP3008
+from gpiozero import MCP3008
 import time
 
-valovastus = MCP3008()
+saatovastus = MCP3008(channel =0)
 
 print("ctrl +C lopettaa ohjelman")
 
 try:
 	while True:
-		lukema = valovastus.read(channel =0)
+		lukema = saatovastus.value
 		print("{:.2f}".format(lukema))
 		#print(lukema)
 		time.sleep(1)
