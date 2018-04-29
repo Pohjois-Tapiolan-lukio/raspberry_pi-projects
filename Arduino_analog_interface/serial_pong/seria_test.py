@@ -13,6 +13,10 @@ ser = serial.Serial("/dev/ttyACM0", 9600)
 try:
     
     while True:
+        command = input("valitse vaihtoehdoista a - h \n")
+        byte = command.encode("utf-8")
+        ser.write(byte)
+        '''
         # Vastaanotetaan arduinon viesti
         serial_in = ser.readline()
         print(serial_in)
@@ -20,7 +24,8 @@ try:
         if "ping" in str(serial_in):
             # Kun saadaan viesti jossa on "ping", lahetetaan "pong"
             ser.write(b"pong")
-        time.sleep(0.5)
+        '''
+        time.sleep(2)
 except KeyboardInterrupt:
     # Ohjelman keskeytys
     ser.close()
