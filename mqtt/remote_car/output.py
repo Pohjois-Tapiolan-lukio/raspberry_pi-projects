@@ -10,8 +10,8 @@ def send_message(client):
 
 def main():
     try:
-        client = mqtt.Client(client_id = "raspberry_out")
-        client.username_pw_set("52232dae", password = "0e9f7409a5dace08")
+        client = mqtt.Client(client_id = "<your device name>")
+        client.username_pw_set("<User>", password = "<Password>")
         client.connect("broker.shiftr.io", 1883, 60)
         client.loop_start()
         while True:

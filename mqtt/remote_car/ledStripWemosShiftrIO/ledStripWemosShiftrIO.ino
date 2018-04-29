@@ -1,13 +1,13 @@
 #include <Adafruit_NeoPixel.h>
 
 /* WiFi Info */
-#define WIFI_SSID "Koti_30F5"
-#define WIFI_PASS "CGFY43UL43LEP"
+#define WIFI_SSID "<Wifi name>"
+#define WIFI_PASS "<Wifi passwd>"
 
 /* Shiftr Info */
-#define SHIFTR_NAME "ledStrip"
-#define SHIFTR_USER "52232dae"
-#define SHIFTR_PASS "0e9f7409a5dace08"
+#define SHIFTR_NAME "<device name>"
+#define SHIFTR_USER "<Key/User>"
+#define SHIFTR_PASS "<Your passwd>"
 
 /* Pins */
 #define PIN D4
