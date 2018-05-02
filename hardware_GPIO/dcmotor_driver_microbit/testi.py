@@ -7,6 +7,7 @@ suorita ensin: python l293d.py
 from gpiozero import Button #kayttaa Broadcomin (BMC) pinninumerointia
 import RPi.GPIO as GPIO
 from l293d import L293D
+from time import sleep
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
@@ -30,6 +31,7 @@ try:
       motor.forwardRight()
     if ohjain_vasemmalle.is_pressed:
       motor.forwardLeft()
+    sleep(0.5)
 except KeyboardInterrupt:
   print("Lopetetaan ohjelma")
 finally:
