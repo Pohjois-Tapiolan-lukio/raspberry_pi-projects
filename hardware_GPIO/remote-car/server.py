@@ -1,13 +1,22 @@
 #import RPi.GPIO as GPIO
 import time
+import picamera
 from flask import Flask, Response
 from l293d_pwm import L293DPWM
+import atexit
 
 car = L293DPWM(24, 12, 26, 13, 5, 6)
 car.stop()
 
 app = Flask(__name__)
 
+camera = picamera.PiCamera()
+camera.resolution = (320, 180)
+camera.framerate = 30
+def close_camera():
+    camera.close()
+
+atexit.register(close_camera)
 
 with open("index.html", "r") as file:
     html = file.read()
@@ -21,19 +30,28 @@ def index():
 def index_js():
     return js
 
-# TODO: PiCamera
-def gen_frame():
+def take_picture():
+    camera.capture(".temp.jpeg", use_video_port = True)
+    with open(".temp.jpeg", "rb") as file:
+        data = file.read()
+    return data
+
+def new_frame():
     while True:
-        frame = b""
+        data = take_picture()
         yield (b"--frame\r\n"
-               b"Content-Type: image/jpeg\r\n\r\n" + frame + b"\r\n")
+               b"Content-Type: image/jpeg\r\n\r\n" + data + b"\r\n")
+
 
 @app.route("/video_feed")
 def video_feed():
-    return Response(gen_frame(),
+    return Response(new_frame(),
                     mimetype="multipart/x-mixed-replace; boundary=frame")
 
-
+@app.route("/video_feed_single")
+def video_feed_single():
+    return Response(take_picture(),
+                    mimetype="image/jpeg")
 
 @app.route("/forward")
 def forward():
