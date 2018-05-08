@@ -11,14 +11,12 @@ app = Flask(__name__)
 
 with open("index.html", "r") as file:
     html = file.read()
-
 with open("index.js", "r") as file:
     js = file.read()
 
 @app.route("/")
 def index():
     return html
-
 @app.route("/index.js")
 def index_js():
     return js
@@ -34,6 +32,8 @@ def gen_frame():
 def video_feed():
     return Response(gen_frame(),
                     mimetype="multipart/x-mixed-replace; boundary=frame")
+
+
 
 @app.route("/forward")
 def forward():
