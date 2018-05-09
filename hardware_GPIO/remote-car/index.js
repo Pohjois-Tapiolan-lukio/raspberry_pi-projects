@@ -27,8 +27,8 @@ function update() {
       if (state.right) request("/right")
     } else if (state.up !== state.down) {
       // Not turning but going forward / back
-      if (state.up) request("/up")
-      if (state.down) request("/down")
+      if (state.up) request("/forward")
+      if (state.down) request("/backward")
     } else {
       request("/stop")
     }
