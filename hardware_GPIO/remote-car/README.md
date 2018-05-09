@@ -4,8 +4,6 @@ Toy car with 2 DC motors which are controlled with from a web interface hosted b
 
 ![L293d shield](l293d-motor-shield.png)
 
-Pinout:
-
 Servo:
 
 | Channel | GPIO   |
@@ -25,3 +23,7 @@ Drivers:
 | 1       | GPIO17 |
 | 2       | GPIO27 |
 | 3       | GPIO22 |
+
+L293D pinout:
+
+![L293D pinout](l293d-pinout.jpg)
