@@ -6,8 +6,8 @@ from l293d_pwm import L293DPWM
 import atexit
 
 # See README.md for pinout
-# 2A = GPIO17, 1A  = GPIO27, 1,2EN = LEFT_PWM  = GPIO26
-# 4A = GPIO23, 34A = GPIO24, 3,4EN = RIGHT_PWM = GPIO06
+# 2A = GPIO17, 1A = GPIO27, 1,2EN = LEFT_PWM  = GPIO26
+# 4A = GPIO23, 3A = GPIO24, 3,4EN = RIGHT_PWM = GPIO06
 car = L293DPWM(17, 27, 26, 23, 24, 6)
 car.stop()
 
