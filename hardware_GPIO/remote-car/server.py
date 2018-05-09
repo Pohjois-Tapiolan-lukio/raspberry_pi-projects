@@ -12,7 +12,8 @@ app = Flask(__name__)
 
 camera = picamera.PiCamera()
 camera.resolution = (320, 180)
-camera.framerate = 30
+camera.framerate = 80
+camera.hflip = True
 def close_camera():
     camera.close()
 
@@ -79,4 +80,4 @@ def stop():
     return "Stopping"
 
 
-app.run(host = "0.0.0.0", port = 8080)
+app.run(host = "0.0.0.0", port = 80)
