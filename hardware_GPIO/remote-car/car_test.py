@@ -1,7 +1,9 @@
 from time import sleep
 from l293d_pwm import L293DPWM
 
-car = L293DPWM(17, 27, 26, 23, 24, 6)
+#car = L293DPWM(17, 27, 26, 23, 24, 6)
+car = L293DPWM(24, 12, 26, 13, 5, 6)
+
 car.stop()
 car.forward(100, 100)
 print("forward")
