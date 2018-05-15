@@ -1,11 +1,11 @@
 import time
 import threading
 
-class L293DPWM():
+class TestingMotorDriver():
     DIST_PER_SEC  = 35.0 # cm/s default 35
     SEC_PER_TURN  = 2.087 # seconds per full turn (depending on the base material, use forwardLeft(), stop() and time.time() to measure the time)
 
-    def __init__(self, left_pin1, left_pin2, left_pwm, right_pin1, right_pin2, right_pwm):
+    def __init__(self):
         pass
 
     def forward(self, left_speed, right_speed):
