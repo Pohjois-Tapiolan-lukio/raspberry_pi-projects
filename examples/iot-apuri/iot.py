@@ -7,26 +7,47 @@ ja Shiftr.io:ta tiedonsiirtoon.
 Lisää README.md:ssä.
 """
 
+import time
+import sys
+import multiprocessing
+
 import paho.mqtt.client as mqtt
 
+from google.assistant.library.event import EventType
+import aiy.assistant.auth_helpers
+from aiy.assistant.library import Assistant
+import aiy.audio
+import aiy.voicehat
+
 DATA = {
-    "subs": [],
-    "connected": False
+    "subs": {},
+    "phrases": {},
+    "initialized": False
 }
 
 DEBUG = False
 
-def setup(shiftr_name, shiftr_key, shiftr_pass):
+# Shiftr.io-stuff
+
+def setup(shiftr_name=0, shiftr_key=0, shiftr_pass=0):
     """
     Yhdistää shiftr.io palvelimelle ja käynnistää Google Assistantin.
     """
+    aiy_process = multiprocessing.Process(target=aiy_main)
+    aiy_process.start()
+    aiy_process.join()
+    print("Assistant started!")
+
+    if shiftr_name == 0 or shiftr_key == 0 or shiftr_pass == 0:
+        DATA["initialized"] = True
+        return
 
     def handle_connect(_client, _userdata, _flags, _code):
         """
         Kutsutaan kun client yhdistää shiftr.io:n palvelimelle.
         """
         print("Shiftr.io connected!")
-        DATA["connected"] = True
+        DATA["initialized"] = True
 
     def handle_message(_client, _userdata, msg):
         """
@@ -45,8 +66,8 @@ def setup(shiftr_name, shiftr_key, shiftr_pass):
     client.connect("broker.shiftr.io", 1883, 60)
     client.loop_start()
     DATA["client"] = client
-    while not DATA["connected"]:
-        pass
+    while not DATA["initialized"]:
+        time.sleep(0.1)
 
 def call_subscriptions(topic, message):
     """
@@ -54,10 +75,10 @@ def call_subscriptions(topic, message):
     """
     if DEBUG:
         print("New message: '" + message + "' (in topic: '" + topic + "')")
-    for sub in DATA["subs"]:
-        (func, topic_) = sub
-        if topic == topic_:
+    if topic in DATA["subs"]:
+        for func in DATA["subs"][topic]:
             func(message)
+
 
 def publish(topic, message):
     """
@@ -68,12 +89,13 @@ def publish(topic, message):
         print("Publish: '" + message + "' (topic: '" + topic + "')")
     DATA["client"].publish(topic, message)
 
+
 def subscribe(topic):
     """
     Kuuntele viestejä annetusta aiheesta (topic), ja
     kutsu annettu funktio kun shiftr.io:sta saadaan uusi viesti.
     """
-    if not DATA["connected"]:
+    if not DATA["initialized"]:
         print("HUOM!  iot-setup -funktio pitää kutsua ennen iot.subscribe -funktioita!")
         return lambda f: f
 
@@ -83,6 +105,74 @@ def subscribe(topic):
         """
         if DEBUG:
             print("Subscribe: " + topic)
-        DATA["subs"].append((func, topic))
+        if topic not in DATA["subs"]:
+            DATA["subs"][topic] = []
+        DATA["subs"][topic].append(func)
         DATA["client"].subscribe(topic)
     return handler
+
+# AIY-stuff
+
+def listen(phrase):
+    """
+    Kuuntele äänikomentoa (phrase) ja kutsu annettu funktio,
+    kun käyttäjä sanoo äänikomennon.
+    """
+    phrase = phrase.lower()
+
+    def handler(func):
+        """
+        Lisää annettu funktio äänikomentoihin.
+        """
+        if phrase not in DATA["phrases"]:
+            DATA["phrases"][phrase] = []
+        DATA["phrases"][phrase].append(func)
+    return handler
+
+
+def say(message):
+    """
+    Google Assistant sanoo tekstin message-parametrissä
+    """
+    aiy.audio.say(message)
+
+
+# Code from https://github.com/google/aiyprojects-raspbian
+# Modified for this library in various places.
+
+def aiy_process_event(assistant, event):
+    """
+    Prosessoi AIY-eventtejä.
+    """
+    status_ui = aiy.voicehat.get_status_ui()
+    if event.type == EventType.ON_START_FINISHED:
+        status_ui.status('ready')
+        if sys.stdout.isatty():
+            print('Say "OK, Google" then speak, or press Ctrl+C to quit...')
+    elif event.type == EventType.ON_CONVERSATION_TURN_STARTED:
+        status_ui.status('listening')
+    elif event.type == EventType.ON_RECOGNIZING_SPEECH_FINISHED and event.args:
+        print('You said:', event.args['text'])
+        text = event.args['text'].lower()
+        if text in DATA["phrases"]:
+            assistant.stop_conversation()
+            for func in DATA["phrases"][text]:
+                func()
+    elif event.type == EventType.ON_END_OF_UTTERANCE:
+        status_ui.status('thinking')
+    elif (event.type == EventType.ON_CONVERSATION_TURN_FINISHED
+          or event.type == EventType.ON_CONVERSATION_TURN_TIMEOUT
+          or event.type == EventType.ON_NO_RESPONSE):
+        status_ui.status('ready')
+    elif event.type == EventType.ON_ASSISTANT_ERROR and event.args and event.args['is_fatal']:
+        sys.exit(1)
+
+
+def aiy_main():
+    """
+    Yhdistää Google Assistant API:n.
+    """
+    credentials = aiy.assistant.auth_helpers.get_assistant_credentials()
+    with Assistant(credentials) as assistant:
+        for event in assistant.start():
+            aiy_process_event(assistant, event)

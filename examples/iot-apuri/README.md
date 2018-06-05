@@ -4,7 +4,7 @@ IoT-apuri on kirjasto jolla saa helposti tehtyä ohjelmia jotka hyödyntävät G
 ## Käyttö
 Asenna MQTT-kirjasto:
 ```sh
-sudo pip install paho-mqtt
+sudo pip3 install paho-mqtt
 ```
 
 ### Ohjelman pohja
@@ -20,7 +20,7 @@ iot.setup("Raspberry", "shiftr-key", "shiftr-secret")
 import iot
 
 # Valmistele iot-kirjasto
-iot.setup("Raspberry", "shiftr-key", "shiftr-secret")
+iot.setup()
 
 # Kuunnellaan sanaa "hello", ja vastataan "Hello, world!" kun käyttäjä sanoo sen
 @iot.listen("hello")
@@ -33,7 +33,7 @@ def said_hello():
 import time
 import iot
 
-# Valmistele iot-kirjasto
+# Valmistele iot-kirjasto (parametreinä shiftr-tiedot)
 iot.setup("Raspberry", "shiftr-key", "shiftr-secret")
 
 # Luo funktio joka printtaa julkaistun viestin
