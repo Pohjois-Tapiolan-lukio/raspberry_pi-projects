@@ -19,6 +19,8 @@ import threading
 import time
 import RPi.GPIO as GPIO
 
+# EDIT
+GPIO.setwarnings(False)
 
 class LED:
     """Starts a background thread to show patterns with the LED.

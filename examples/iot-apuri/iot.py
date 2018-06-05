@@ -29,45 +29,43 @@ DEBUG = False
 
 # Shiftr.io-stuff
 
-def setup(shiftr_name=0, shiftr_key=0, shiftr_pass=0):
+def run(shiftr_name=0, shiftr_key=0, shiftr_pass=0):
     """
     Yhdistää shiftr.io palvelimelle ja käynnistää Google Assistantin.
     """
-    aiy_process = multiprocessing.Process(target=aiy_main)
-    aiy_process.start()
-    aiy_process.join()
-    print("Assistant started!")
 
-    if shiftr_name == 0 or shiftr_key == 0 or shiftr_pass == 0:
-        DATA["initialized"] = True
-        return
+    if shiftr_name != 0 and shiftr_key != 0 and shiftr_pass != 0:
+        def handle_connect(_client, _userdata, _flags, _code):
+            """
+            Kutsutaan kun client yhdistää shiftr.io:n palvelimelle.
+            """
+            print("Shiftr.io connected!")
+            DATA["initialized"] = True
 
-    def handle_connect(_client, _userdata, _flags, _code):
-        """
-        Kutsutaan kun client yhdistää shiftr.io:n palvelimelle.
-        """
-        print("Shiftr.io connected!")
-        DATA["initialized"] = True
+        def handle_message(_client, _userdata, msg):
+            """
+            Kutsutaan kun client saa viestin shiftr.io:n palvelimilta.
+            """
+            call_subscriptions(msg.topic, msg.payload.decode("utf-8"))
 
-    def handle_message(_client, _userdata, msg):
-        """
-        Kutsutaan kun client saa viestin shiftr.io:n palvelimilta.
-        """
-        call_subscriptions(msg.topic, msg.payload.decode("utf-8"))
+        if shiftr_key == "shiftr-key":
+            print("HUOM!  Muista korvata 'shiftr-key' omalla shiftr keylläsi!")
+        if shiftr_pass == "shiftr-secret":
+            print("HUOM!  Muista korvata 'shiftr-secret' omalla shiftr secretilläsi!")
+        client = mqtt.Client(client_id=shiftr_name)
+        client.on_connect = handle_connect
+        client.on_message = handle_message
+        client.username_pw_set(shiftr_key, password=shiftr_pass)
+        client.connect("broker.shiftr.io", 1883, 60)
+        client.loop_start()
+        DATA["client"] = client
+        while not DATA["initialized"]:
+            time.sleep(0.1)
+        # Shiftr connected, subscribe
+        for topic in DATA["subs"]:
+            DATA["client"].subscribe(topic)
 
-    if shiftr_key == "shiftr-key":
-        print("HUOM!  Muista korvata 'shiftr-key' omalla shiftr keylläsi!")
-    if shiftr_pass == "shiftr-secret":
-        print("HUOM!  Muista korvata 'shiftr-secret' omalla shiftr secretilläsi!")
-    client = mqtt.Client(client_id=shiftr_name)
-    client.on_connect = handle_connect
-    client.on_message = handle_message
-    client.username_pw_set(shiftr_key, password=shiftr_pass)
-    client.connect("broker.shiftr.io", 1883, 60)
-    client.loop_start()
-    DATA["client"] = client
-    while not DATA["initialized"]:
-        time.sleep(0.1)
+    aiy_main()
 
 def call_subscriptions(topic, message):
     """
@@ -95,10 +93,7 @@ def subscribe(topic):
     Kuuntele viestejä annetusta aiheesta (topic), ja
     kutsu annettu funktio kun shiftr.io:sta saadaan uusi viesti.
     """
-    if not DATA["initialized"]:
-        print("HUOM!  iot-setup -funktio pitää kutsua ennen iot.subscribe -funktioita!")
-        return lambda f: f
-
+    
     def handler(func):
         """
         Lisää annettu funktio subscriptioneihin.
@@ -108,7 +103,6 @@ def subscribe(topic):
         if topic not in DATA["subs"]:
             DATA["subs"][topic] = []
         DATA["subs"][topic].append(func)
-        DATA["client"].subscribe(topic)
     return handler
 
 # AIY-stuff
