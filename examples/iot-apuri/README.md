@@ -28,7 +28,6 @@ iot.run()
 
 ### Shiftr.io-tiedonvälitys
 ```python
-import time
 import iot
 
 # Luo funktio joka printtaa julkaistun viestin
@@ -40,10 +39,6 @@ def new_message(message):
 @iot.listen("hello")
 def hello():
     iot.publish("messages", "Hello, world!")
-
-# Anna shiftr.io:lle aikaa saada julkaistu viesti ja lähettää se takaisin
-# (jotta new_message-funktio voi printata sen)
-time.sleep(2)
 
 iot.run("Raspberry", "shiftr-key", "shiftr-secret")
 ```
