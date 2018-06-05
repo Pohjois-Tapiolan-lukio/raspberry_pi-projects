@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, Response
 import picamera
 
 app = Flask(__name__)
@@ -17,4 +17,4 @@ def camera_capture():
     return picture
 
 
-app.run(host="0.0.0.0")
+app.run(host="0.0.0.0",port=5000)
