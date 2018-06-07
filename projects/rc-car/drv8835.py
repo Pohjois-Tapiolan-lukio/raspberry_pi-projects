@@ -5,11 +5,11 @@ GPIO.setwarnings(False)
 
 class DRV8835():
     def __init__(self):
-        self.LEFT = 12
-        self.RIGHT = 13
+        self.LEFT = 5
+        self.RIGHT = 6
         
-        GPIO.setup(5, GPIO.OUT)
-        GPIO.setup(6, GPIO.OUT)
+        GPIO.setup(12, GPIO.OUT)
+        GPIO.setup(13, GPIO.OUT)
 
         GPIO.setup(self.LEFT, GPIO.OUT)
         GPIO.setup(self.RIGHT, GPIO.OUT)
