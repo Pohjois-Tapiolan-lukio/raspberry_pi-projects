@@ -14,9 +14,9 @@ class DRV8835():
         GPIO.setup(self.LEFT, GPIO.OUT)
         GPIO.setup(self.RIGHT, GPIO.OUT)
         
-        self.LEFT_PWM = GPIO.PWM(5)
+        self.LEFT_PWM = GPIO.PWM(12, 50)
         self.LEFT_PWM.start(1)
-        self.RIGHT_PWM = GPIO.PWM(6)
+        self.RIGHT_PWM = GPIO.PWM(13, 50)
         self.RIGHT_PWM.start(1)
 
     def forward(self, left_speed, right_speed):
