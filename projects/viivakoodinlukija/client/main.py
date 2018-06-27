@@ -18,16 +18,16 @@ def getText():
     return r.recognize_google(audio).lower()
 
 while True:
-    koodi=input("Lue koodi: ")
-    res=requests.get("http://"+hostname+"/get?koodi="+koodi)
+    koodi=input("Lue koodi: ") #Viivakoodinlukija toimii kuin näppäimistö
+    res=requests.get("http://"+hostname+"/get?koodi="+koodi) #Kysy palvelimelta, tunteeko se luettua koodia
     print(res.text)
     o=json.loads(res.text)
     found=o["found"]
     print(found)
-    if found=="true":
+    if found=="true": #Jos tuote on tietokannassa, kerro sen nimi
         say("This product is in the database")
         say("This is "+o["nimi"])
-    else:
+    else: #Jos tuote ei ole tietokannassa, kysy, mikä se on, ja päivitä tietokanta
         say("This product is not in the database")
         say("What is this?")
         t=getText()
