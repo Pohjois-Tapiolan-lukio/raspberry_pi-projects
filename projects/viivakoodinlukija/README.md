@@ -8,3 +8,8 @@ Projektissa on kaksi puolta, palvelin- ja lukijapuoli. Palvelimella on flask-poh
 * Requests `pip install requests`
 * SpeechRecognition `pip install SpeechRecognition`
 * Google CloudSpeech `google-cloud-speech`
+
+## Palvelimen valmistelu
+1. Asenna sql-palvelin, esimerkiksi mariadb `apt install mariadb-server`
+2. Luo tietokanta nimeltään viivakoodi `echo "CREATE DATABASE viivakoodit;"|mysql -u root -p`
+3. Luo esimerkkitaulu `mysql -u root -p viivakoodit< db.sql`
