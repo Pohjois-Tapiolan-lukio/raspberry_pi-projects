@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
-# Tuodaan ohjelmaan sarjaliikennemoduuli
-import serial
+# Tuodaan ohjelmaan sarjaliikennemoduuli ja
+# saannollisten lausekkeiden moduuli
+import serial, re
 
 # Maariteellaan Arduinon merkkilaitteen sijainti
 laite = "/dev/ttyACM0"
@@ -17,12 +18,23 @@ with open(laite) as f:
 # Luodaan Serial-olio
 ser = serial.Serial(laite, baudrate=9600, timeout=1)
 
+# Luodaan valmis Re-olio
+dataRe = re.compile(r"^(\d{1,4}),(\d{1,4}),([01])$")
+
 # Yritetaan ajaa koodi kunnes napataa KeyboardInterrupt-olio
 try:
     while True:
         # Luetaan sarjaliikennetta
-        rivi = ser.readline()
-        print(rivi)
+        rivi = ser.readline().decode('ascii').strip('\r\n')
+        # Ryhmitellaan rivin data
+        groups = dataRe.findall(rivi)
+        if not groups:
+            print("Rikkinaista dataa {}".format(rivi))
+            # Jatka seuraavaan while-silmukan iteraatioon
+            # (skippaa alla olevan koodin)
+            continue
+
+        print(groups)
 except KeyboardInterrupt:
     # Suljetaan sarjaliikennevayla
     ser.close()

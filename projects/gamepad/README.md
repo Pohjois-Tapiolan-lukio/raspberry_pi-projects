@@ -69,7 +69,7 @@ with open(laite) as f:
     termios.tcsetattr(f, termios.TCSAFLUSH, attrs)
 ```
 
-Luodaan `serial` objekti ja annetaan sille parametrit
+Luodaan `serial`-olio ja annetaan sille parametrit
 - laite on merkkilaitteen absoluuttinen sijainti
 - baudrate=9600 asettaa serialin merkkitaajuuden 9600:ksi
 > **Tärkeää**: baudrate täytyy olla sama kuin Arduino-koodin
@@ -90,7 +90,7 @@ rivi = ser.readline()
 print(rivi)
 ```
 
-Suljetaan `serial` objekti
+Suljetaan `serial`-olio
 ```python
 ser.close()
 ```
@@ -133,7 +133,7 @@ Tuodaan ohjelmaan `re`-paketti
 import re
 ```
 
-Tehdään _Säännöllisen lausekkeen objekti_
+Tehdään _Säännöllisen lausekkeen olio_
 
 <img src="regex1.png"></img>
 
@@ -147,24 +147,53 @@ Lauseen analyysi:
 - `([01])`, kolmas ryhmä
 - `$`, rivin loppu
 
-Tämä säännöllinen lause ottaa rivistä
+Tämä säännöllinen lauseke ottaa rivistä
 ```
 489,514,0
 ```
-arvot listaan `matches`
+arvot listaan
 ```
-("489","514","0")
+[("489","514","0")]
 ```
-Python-koodilla
+
+##### Dekoodaus Python-koodilla
+Luodaan valmiiksi säännölinen lauseke -olio
 ```python
 dataRe = re.compile(r"^(\d{1,4}),(\d{1,4}),([01])$")
-matches = dataRe.findall("489,514,0")
+```
+
+Näin voidaan ryhmitellä data
+```python
+data = "489,514,0"
+groups = dataRe.findall(data)
+```
+
+Jos data on virheellistä, esimerkiksi
+```python
+data = "0,512,9"
+```
+niin säännöllinen lauseke -olion `findall`-funktio palauttaa
+```python
+[]
+```
+
+Nyt yhdistetään datan dekoodaus ohjelmaan
+```python
+try:
+    while True:
+        rivi = ser.readline()
+        groups = dataRe.findall(rivi)
+        if not groups:
+            print("Rikkinaista dataa {}".format(rivi))
+        print(groups)
+except KeyboardInterrupt:
+    ser.close()
+    print(" Ohjelma suljetaan")
 ```
 
 ---
-### <a name="regex"></a> Dekoodataan data
-> Tätä ei ole pakko lukea, mutta jos teit oman [koodikielen](https://github.com/Pohjois-Tapiolan-lukio/arduino-projects/tree/master/gamepad#koodi)
-> Arduinolle, tämä on oleellista aineistoa
+### <a name="regex"></a> Dekoodataan oma data
+> Tätä ei ole pakko lukea, paitsi jos teit oman [koodikielen](https://github.com/Pohjois-Tapiolan-lukio/arduino-projects/tree/master/gamepad#koodi)
 
 Datan dekoodaamiseen käytetään [<i>Säännöllisiä lausekkeita</i>](https://fi.wikipedia.org/wiki/S%C3%A4%C3%A4nn%C3%B6llinen_lauseke)
 Säännölliset lausekkeet käsittelevät merkkijonoja.
