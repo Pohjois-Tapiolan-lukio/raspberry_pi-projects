@@ -138,14 +138,28 @@ Tehdään _Säännöllisen lausekkeen objekti_
 <img src="regex1.png"></img>
 
 Lauseen analyysi:
-- ^, rivin alku
-- \d, numero [0-9]
-- {1,4}, 1-4 kertaa
-- (\d{1,4}), ensimmäinen ja toinen ryhmä
-- ',', ,-merkki
-- [01], merkki 0 tai 1
-- ([01]), kolmas ryhmä
-- $, rivin loppu
+- `^`, rivin alku
+- `\d`, numero [0-9]
+- `{1,4}`, 1-4 kertaa
+- `(\d{1,4})`, ensimmäinen ja toinen ryhmä
+- `','`, ,-merkki
+- `[01]`, merkki 0 tai 1
+- `([01])`, kolmas ryhmä
+- `$`, rivin loppu
+
+Tämä säännöllinen lause ottaa rivistä
+```
+489,514,0
+```
+arvot listaan `matches`
+```
+("489","514","0")
+```
+Python-koodilla
+```python
+dataRe = re.compile(r"^(\d{1,4}),(\d{1,4}),([01])$")
+matches = dataRe.findall("489,514,0")
+```
 
 ---
 ### <a name="regex"></a> Dekoodataan data
