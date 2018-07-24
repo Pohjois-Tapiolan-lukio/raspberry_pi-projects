@@ -134,7 +134,18 @@ import re
 ```
 
 Tehdään _Säännöllisen lausekkeen objekti_
-`re.compile(r"`![](regex1.png)`")`
+
+<img src="regex1.png"></img>
+
+Lauseen analyysi:
+- ^, rivin alku
+- \d, numero [0-9]
+- {1,4}, 1-4 kertaa
+- (\d{1,4}), ensimmäinen ja toinen ryhmä
+- ',', ,-merkki
+- [01], merkki 0 tai 1
+- ([01]), kolmas ryhmä
+- $, rivin loppu
 
 ---
 ### <a name="regex"></a> Dekoodataan data
@@ -148,7 +159,6 @@ Säännöllisten lausekkeiden avulla voidaan _groupata_ osumia,
 _vahvistaa_ datan _eheys_ tai _korvata_ osumia tekstillä.
 
 #### Materiaali
-
 Lue Aallon wikistä sivut 16-20 [Säännöllisistä lausekkeista](https://wiki.aalto.fi/download/attachments/63548818/luento9.pdf?version=1&modificationDate=1332923875000&api=v2)
 > Kalvolla on muitakin hyödyllisiä aiheita, joita kannattaa lukea
 
@@ -157,5 +167,5 @@ ja [hakasulkujen käytöstä](https://www.linux.fi/wiki/S%C3%A4%C3%A4nn%C3%B6lli
 
 Käy interaktiivinen [harjoitus](https://regexone.com/) läpi
 
-Pythonin Säännöllisissä lausekkeissa hyötyä löydät täältä
+Pythonin Säännöllisissä lausekkeissa apua löydät täältä
 <https://docs.python.org/3/howto/regex.html>
