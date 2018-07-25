@@ -33,7 +33,6 @@ try:
             # Jatka seuraavaan while-silmukan iteraatioon
             # (skippaa alla olevan koodin)
             continue
-
         print(groups)
 except KeyboardInterrupt:
     # Suljetaan sarjaliikennevayla
