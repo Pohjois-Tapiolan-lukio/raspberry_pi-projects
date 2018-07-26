@@ -69,7 +69,7 @@ def make_translation(translation_text, src, dest):
     payload = {}
     payload['value1'] = translation_text
     payload['value2'] = translated_text
-    response = requests.post("https://maker.ifttt.com/trigger/dictPost/with/key/g0O0YXMjT_Kr3X4Wf5fzSGrPVHesJjHSZK1J13kQQRW", data = payload)
+    response = requests.post("https://maker.ifttt.com/trigger/< insert here your event name>/with/key/<insert here your key ", data = payload)
     return translated_text
 
 
