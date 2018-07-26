@@ -49,9 +49,9 @@ def run(shiftr_name=0, shiftr_key=0, shiftr_pass=0):
             call_subscriptions(msg.topic, msg.payload.decode("utf-8"))
 
         if shiftr_key == "shiftr-key":
-            print("HUOM!  Muista korvata 'shiftr-key' omalla shiftr keylläsi!")
+            print("HUOM!  Muista korvata 'shiftr-key' omalla shiftr keyllasi!")
         if shiftr_pass == "shiftr-secret":
-            print("HUOM!  Muista korvata 'shiftr-secret' omalla shiftr secretilläsi!")
+            print("HUOM!  Muista korvata 'shiftr-secret' omalla shiftr secretilasi")
         client = mqtt.Client(client_id=shiftr_name)
         client.on_connect = handle_connect
         client.on_message = handle_message

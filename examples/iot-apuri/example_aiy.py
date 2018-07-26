@@ -29,8 +29,8 @@ def said_right():
 def said_How_are_you():
     iot.say("I'm good. Thank you for asking ")
     
-@iot.listen("Tell me a joke")
+'''@iot.listen("Tell me a joke")
 def said_Tell_me_a_joke():
     iot.say("What is red and bad for your teeth?,, a brick. hehehe ")
-
+'''
 iot.run("voice1","shiftr-key","shiftr-secret")
