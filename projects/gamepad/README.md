@@ -190,7 +190,7 @@ groups = dataRe.findall(data)
 > lausekkeiden_ avulla
 >
 > Tässä olisi listan validoinnin esimerkki koodi (älä käytä missään nimessä!)
-```
+```python
 lista = data.split(',')
 
 def validate(lista):
