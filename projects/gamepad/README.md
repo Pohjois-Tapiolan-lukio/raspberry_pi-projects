@@ -189,7 +189,7 @@ groups = dataRe.findall(data)
 > napata arvot merkkijonsta samaan aikaan Pythonin _säännöllisten
 > lausekkeiden_ avulla
 >
-> Tässä olisi listan validoinnin esimerkki koodi (älä käytä missään nimessä!)
+> Tässä olisi listan validoinnin esimerkkikoodi (älä käytä missään nimessä!)
 ```python
 lista = data.split(',')
 
@@ -217,7 +217,7 @@ niin `dataRe`-olion `findall`-funktio palauttaa
 ```python
 []
 ```
-josta on tosi helppo testata, onko data validia `if`-lausekkeen
+josta on tosi helppoa testata, onko data validia `if`-lausekkeen
 avulla.
 
 Nyt yhdistetään datan dekoodaus ohjelmaan
@@ -242,8 +242,8 @@ except KeyboardInterrupt:
 Ohjelma näyttää tällä hetkellä [tältä](prosessointi.py)
 
 ### Python <i>uinput</i>
-Jos halutaan ohjelman tuottavan peliohjain-tapahtumia tarvitsemme
-input-merkkilaitteen.
+Jos halutaan ohjelman tuottavan peliohjain-tapahtumia (tai mitä tahansa muita)
+tarvitsemme input-merkkilaitteen.
 
 Uinput on _kernel moduuli_, jolla voi emuloida input-laitteita.
 
@@ -291,6 +291,7 @@ with uinput.Device([uinput.ABS_X]) as gamepad:
 
 ##### Tapahtumien nimet
 Tapahtumien nimet, kuten `ABS_X`, `BTN_SOUTH` löytyy sivuilta
+
 <https://www.kernel.org/doc/Documentation/input/gamepad.txt>
 <https://www.kernel.org/doc/html/v4.14/input/gamepad.html>
 
@@ -302,11 +303,12 @@ Nyt voidaan lisätä akseleita ja nappeja uinput-laitteeseen
 ```python
 with uinput.Device([uinput.ABS_X, uinput.ABX_Y, uinput.BTN_SOUTH]) as gamepad:
 ```
-Laitetaan `Device`-luokan initialisointiargumenteiksi lista akseleita ja
+Laitetaan `Device`-luokan initialisointiargumenteiksi lista akseleista ja
 napeista, joita ohjelma emuloi
 
 Muutetaan `groups`-listan ensimmäisen alkion alkiot kokonaisluvuiksi
-> Rivi tulee vasta `if ...: ... continue`-osan jälkeen
+> Rivi tulee vasta `if ...: ... continue`-osan jälkeen,
+> koska muuten groups[0] palauttaa `IndexError: list index out of range`
 ```python
 groups = [int(arvo) for arvo in groups[0]]
 ```
