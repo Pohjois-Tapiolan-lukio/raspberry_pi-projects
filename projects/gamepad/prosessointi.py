@@ -28,7 +28,7 @@ try:
         rivi = ser.readline().decode('ascii').strip('\r\n')
         # Ryhmitellaan rivin data
         groups = dataRe.findall(rivi)
-        if not groups:
+        if not groups: # jos groups on []
             print("Rikkinaista dataa {}".format(rivi))
             # Jatka seuraavaan while-silmukan iteraatioon
             # (skippaa alla olevan koodin)

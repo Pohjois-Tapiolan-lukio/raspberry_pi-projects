@@ -22,6 +22,7 @@ Voimme kuunnella Raspberry Pi:lla sarjaliikennettä hyvinkin helposti.
 Kytke Arduino USB-johdolla Raspberryyn
 
 Aja terminaalissa komento
+<a name "merkkilaite"></a>
 ```shell
 ls -go /dev/serial/by-id/
 ```
@@ -53,7 +54,7 @@ import serial
 ```
 
 Määritellään _merkkilaitteen_ sijainti
-> Tässä tarvitset Arduino-merkkilaitetiedoston sijaintia!
+> Tässä tarvitset Arduino-merkkilaitetiedoston [sijaintia](#merkkilaite)!
 > Esimerkkinä toimii `/dev/ttyACM0`
 
 ```python
@@ -62,6 +63,9 @@ laite = "/dev/ttyACM0"
 
 Lisätään tämä koodi estämään Arduinoa resetoitumasta yhteyden
 sulkemisen jälkeen
+> Tästä koodinpätkästä ei tarvitse huolehtia.
+>
+> Sen voi jopa jättää pois
 ```python
 with open(laite) as f:
     import termios
@@ -76,7 +80,7 @@ Luodaan `serial`-olio ja annetaan sille parametrit
 > **Tärkeää**: baudrate täytyy olla sama kuin Arduino-koodin
 > `Serial.begin`-kutsun parametri `setup`-rutiinissa
 
-- timeout=1 asettaa 1 sekunnin aikarajan lukemisen kestolle.
+- `timeout=1` asettaa 1 sekunnin aikarajan lukemisen kestolle.
 Jos 1 sekunnin sisällä ei ole tullut merkkijonoa joka sisältää `\n`
 (uudenrivin) -symbolin, niin `readline` funktio palauttaa
 siihen mennessä tulleen datan. Timeout on hyödyllinen, koska ilman
@@ -124,19 +128,28 @@ except KeyboardInterrupt:
 ```
 
 Nyt ohjelma näyttää [tältä](silmukka.py)
+> **Tärkeää**: While-loopissa ei kuulu olla nukkumisaikaa (`time.sleep`)
+> ollenkaan, että `readline` saisi aina tuoreimman datan
 
 #### Datan <i>dekoodaus</i>
 > Jos teit oman [koodikielen](https://github.com/Pohjois-Tapiolan-lukio/arduino-projects/tree/master/gamepad#koodi),
 > lue ohjeet [<i>Säännöllisten lausekkeiden</i> käytölle](#regex)
 
+##### <a name="python-dekoodaus"></a> Dekoodaus Python-koodilla
 Tuodaan ohjelmaan `re`-paketti
 ```python
 import re
 ```
 
+Luodaan valmiiksi säännölinen lauseke -olio
+> Tämä nostaa suoritustehoa, kun säännöllistä lauseketta ei tarvitse
+> rakentaa joka iteraatio
+
 Tehdään _Säännöllisen lausekkeen olio_
 
-<img src="regex1.png"></img>
+```python
+dataRe = re.compile(r"^(\d{1,4}),(\d{1,4}),([01])$")
+```
 
 Lauseen analyysi:
 - `^`, rivin alku
@@ -152,33 +165,60 @@ Tämä säännöllinen lauseke ottaa rivistä
 ```
 489,514,0
 ```
-arvot listaan
-```
-[("489","514","0")]
-```
+arvot `489`, `514`, `0`
 
-##### <a name="python-dekoodaus"></a> Dekoodaus Python-koodilla
-Luodaan valmiiksi säännölinen lauseke -olio
-> Tämä nostaa suoritustehoa, kun säännöllistä lauseketta ei tarvitse
-> rakentaa joka iteraatio
-```python
-dataRe = re.compile(r"^(\d{1,4}),(\d{1,4}),([01])$")
-```
-
-Näin voidaan saadaan datasta ryhmät
+Pythonissa data ryhmitellään `findall`-metodilla
 ```python
 data = "489,514,0"
 groups = dataRe.findall(data)
 ```
 
+> Ihmettelet varmasti, miksei käytetä `str.split`-metodia. Syy on hyvin
+> yksinkertainen:
+>
+> Jos vastaantuleva merkkijono on tämän näköinen
+>
+> `,231321,,,,9000,,,`
+>
+> sen `split(',')`-kutsu palauttaisi listan
+>
+> `['', '231321', '', '', '', '9000', '', '', '']`
+>
+> Nyt pitäisi validoida lista, joka olisi tuskallista.
+> Listan validoinnin sijasta voidaan sekä validoida, että
+> napata arvot merkkijonsta samaan aikaan Pythonin _säännöllisten
+> lausekkeiden_ avulla
+>
+> Tässä olisi listan validoinnin esimerkki koodi (älä käytä missään nimessä!)
+```
+lista = data.split(',')
+
+def validate(lista):
+    if len(lista) != 3:
+        return False
+    for i in range(3):
+        arvo = lista[i]
+        try:
+            if not int(arvo) in range(0,(1023,2)[i > 2]):
+                return False
+        except ValueError:
+            return False
+    return True
+```
+> Kuten nähdään, datan validointi on tuskaa ilman _säännöllisiä lausekkeita_
+
 Jos data on virheellistä, esimerkiksi
 ```python
 data = "0,512,9"
+data = "12345,512,0"
+data = ",231321,,,,9000,,,"
 ```
 niin `dataRe`-olion `findall`-funktio palauttaa
 ```python
 []
 ```
+josta on tosi helppo testata, onko data validia `if`-lausekkeen
+avulla.
 
 Nyt yhdistetään datan dekoodaus ohjelmaan
 ```python
@@ -186,7 +226,7 @@ try:
     while True:
         rivi = ser.readline().decode('ascii').strip('\r\n')
         groups = dataRe.findall(rivi)
-        if not groups:
+        if not groups: # jos groups on []
             print("Rikkinaista dataa {}".format(rivi))
             continue
         print(groups)
@@ -329,6 +369,9 @@ toimivat gamepadilla
 
 Datan dekoodaamiseen käytetään [<i>Säännöllisiä lausekkeita</i>](https://fi.wikipedia.org/wiki/S%C3%A4%C3%A4nn%C3%B6llinen_lauseke)
 Säännölliset lausekkeet käsittelevät merkkijonoja.
+> Dekoodaus ei tässä tarkoita esimerkiksi
+> heksadesimaalista desimaaliin muutosta.
+> Sellaista dekoodausta ei tehdä säännöllisillä lausekkeilla
 
 Säännöllisten lausekkeiden avulla voidaan _groupata_ osumia,
 _vahvistaa_ datan _eheys_ tai _korvata_ osumia tekstillä.
@@ -339,6 +382,13 @@ Lue Aallon wikistä sivut 16-20 [Säännöllisistä lausekkeista](https://wiki.a
 
 Lue Linux.fi artikkelista [kaarisulkujen käytöstä](https://www.linux.fi/wiki/S%C3%A4%C3%A4nn%C3%B6llinen_lauseke#Sulut:_.28_ja_.29)
 ja [hakasulkujen käytöstä](https://www.linux.fi/wiki/S%C3%A4%C3%A4nn%C3%B6llinen_lauseke#Merkkiluokat:_.5B.5D)
+> **Huomaa**: kaarisulut yleisissä säännöllisissä lausekkeissa ovat
+> eri asia, kuin Pythonin säännöllisissä lausekkeissa, joissa ne (kaarisulut)
+> ryhmittelevät datasta tärkeät osat
+>
+> Pythonissa kaarisulkuja vastaa `(?:regex tähän)` esim
+> `^(?:[0-9]+\s)+$` osuu kaikkiin merkkijonoihin, joissa on välilyönnillä
+> erotettuja lukuja
 
 Käy interaktiivinen [harjoitus](https://regexone.com/) läpi
 
@@ -346,7 +396,7 @@ Pythonin Säännöllisissä lausekkeissa apua löydät täältä
 <https://docs.python.org/3/howto/regex.html>
 
 Kun olet luonut koodaustasi vastaavan säännöllisen lausekkeen, laita se
+ohjelmaan
 ```python
 dataRe = re.compile(r"tanne regex")
 ```
-funktion sisälle `raw`-stringinä
