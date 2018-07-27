@@ -1,5 +1,8 @@
 # Gamepad
 Arduino-osuuden tähän projektiin löydät [täältä](https://github.com/Pohjois-Tapiolan-lukio/arduino-projects/tree/master/gamepad)
+> Jos Microbitin ohjelmointi kiinnostaa enemmän, voit korvata sillä Arduinon
+> <https://github.com/Pohjois-Tapiolan-lukio/microbit-projects/tree/master/gamepad>
+
 
 ## Yhteenveto
 Tässä projektissa opetetetaan Arduinon ja tietokoneen (Raspberry Pi:n) välisen
