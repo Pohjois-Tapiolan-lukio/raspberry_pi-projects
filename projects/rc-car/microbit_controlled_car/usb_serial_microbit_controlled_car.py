@@ -17,16 +17,9 @@ import serial, re
 from threading import Thread
 
 # Maariteellaan Arduinon merkkilaitteen sijainti
+# testaa komennolla ls -l /deb/tty* microbitin usb-kytkennalla ja ilman!
 laite = "/dev/ttyACM0"
 
-# Ala resetoi Arduinoa seriaaliyhteyden sulkeutuessa
-# Disable reset after hangup
-
-#with open(laite) as f:
-#    import termios
-#    attrs = termios.tcgetattr(f)
-#    attrs[2] = attrs[2] & ~termios.HUPCL
-#    termios.tcsetattr(f, termios.TCSAFLUSH, attrs)
 
 # Luodaan Serial-olio
 ser = serial.Serial(laite, baudrate=115200, timeout=1)
@@ -37,7 +30,7 @@ dataRe = re.compile(r"^\s*(-?\d+[?:[.]\d+]?)\s+(-?\d+[?:[.]\d+]?)$")
 
 # car = L293DPWM(17, 27, 26, 23, 24, 6)
 # car = L293DPWM(24, 12, 26, 13, 5, 6)
-car = DRV8835()
+car = DRV8835()  # if Polulu motor driver for raspberry is used
 
 def maxmin(arvo, maks, minn):
     return max(min(arvo, maks), minn)
@@ -52,22 +45,23 @@ def serial_read():
         # Ryhmitellaan rivin data
         groups = dataRe.findall(rivi)
         if not groups:
-            print("Rikkinaista dataa {}".format(rivi))
+            #print("Rikkinaista dataa {}".format(rivi))
             # Jatka seuraavaan while-silmukan iteraatioon
             # (skippaa alla olevan koodin)
             continue
         arvot = [float(x) for x in groups[0]]
         # [1.32323, 5.23423]
-        # print(arvot)
+        #Warning: if you use print, yuor threads won't sync
+        #print(arvot) !
         
        
        
 def drive_car():       
     while active:
         if arvot:
-            kaannos = int(30*arvot[1]/90.0)
-            car.forward(maxmin(int(100*arvot[0]/90.0)-kaannos,100,-100),
-                    maxmin(int(100*arvot[0]/90.0)+kaannos,100,-100))
+            kaannos = int(30*arvot[1]/45.0) # or /90
+            car.forward(maxmin(int(100*arvot[0]/45.0)-kaannos,100,-100),
+                    maxmin(int(100*arvot[0]/45.0)+kaannos,100,-100))
        
        
        
