@@ -52,7 +52,7 @@ def serial_read():
         arvot = [float(x) for x in groups[0]]
         # [1.32323, 5.23423]
         #Warning: if you use print, yuor threads won't sync
-        #print(arvot) !
+        #print(arvot)
         
        
        
