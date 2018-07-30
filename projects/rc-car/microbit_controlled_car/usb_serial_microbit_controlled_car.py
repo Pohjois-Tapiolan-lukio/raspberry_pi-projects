@@ -38,6 +38,7 @@ def maxmin(arvo, maks, minn):
 arvot = []
 active = True
 def serial_read():
+    print("Serial_thread kaynnistetty")
     global arvot
     while active:
         # Luetaan sarjaliikennetta
@@ -56,14 +57,19 @@ def serial_read():
         
        
        
-def drive_car():       
+def drive_car():
+    print("Car_thread kaynnistetty")
+    from numpy import sign
     while active:
         if arvot:
-            kaannos = int(30*arvot[1]/45.0) # or /90
-            car.forward(maxmin(int(100*arvot[0]/45.0)-kaannos,100,-100),
-                    maxmin(int(100*arvot[0]/45.0)+kaannos,100,-100))
-       
-       
+            kaannos = 30*arvot[1]/45.0 # or /90.0
+            kaasu = 100*arvot[0]/45.0
+            suunta = sign(kaasu)
+            motorLeft = maxmin(int(kaasu-suunta*kaannos),100,-100)
+            motorRight = maxmin(int(kaasu+suunta*kaannos),100,-100)
+
+            car.forward(motorLeft, motorRight)
+
        
 try:
     # usb-serialin lukeminen ja auton ohjaaminen ovat rinnakkaisia prosesseja.
@@ -74,30 +80,15 @@ try:
     car_thread = Thread(target = drive_car)
     serial_thread.start()
     car_thread.start()
- 
-except KeyboardInterrupt:
+    while 1:
+        # odota etta tulee CTRL-C
+        pass
+
+except:
     # Suljetaan sarjaliikennevayla
     active = False
+    serial_thread.join()
+    car_thread.join()
     ser.close()
     car.stop()
     print(" Ohjelma suljetaan")
-    
-'''
-# testikoodi auton kytkentojen testaukseen.
-car.stop()
-car.forward(100, 100)
-print("forward")
-sleep(2)
-car.stop()
-car.backward(100,100)
-print("back")
-sleep(2)
-car.forward(25,100)
-print("Left")
-sleep(1)
-car.stop()
-car.forward(100,25)
-print("Right")
-sleep(2)
-car.stop()
-'''
