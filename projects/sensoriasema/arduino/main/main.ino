@@ -2,6 +2,9 @@
 #include <WiFi101.h>
 #include <MQTTClient.h>
 
+#define TRIGGER 9
+#define ECHO 10
+
 #include "arduino_secrets.h"
 char ssid[] = SECRET_SSID;
 char pass[] = SECRET_PASS;
@@ -13,19 +16,37 @@ MQTTClient mqtt_client;
 void handleMessage(String &topic, String &payload) {
   Serial.println("got a message");
   Serial.println(payload);
-  
+  if (payload == "0") {
+    float distance = ultrasonic();
+    Serial.println(distance);
+    mqtt_client.publish("/data", (String) distance);
+  }
+
 }
+float ultrasonic() {
+  digitalWrite(TRIGGER, LOW);
+  delayMicroseconds(5);
+  digitalWrite(TRIGGER, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIGGER, LOW);
 
+  float duration = pulseIn(ECHO, HIGH);
+
+  return duration / 58.2;
+
+}
 void setup() {
-  //Configure pins for Adafruit ATWINC1500 Feather
   WiFi.setPins(8, 7, 4, 2);
-  //Initialize serial and wait for port to open:
   Serial.begin(9600);
-
+  
+  pinMode(TRIGGER, OUTPUT);
+  pinMode(ECHO, INPUT);
+  
   connectShiftr();
 }
 
 void loop() {
+
   mqtt_client.loop();
 
   mqtt_client.connected() || connectShiftr();
@@ -36,14 +57,11 @@ bool connectShiftr() {
   while ( status != WL_CONNECTED) {
     Serial.print("Attempting to connect to WPA SSID: ");
     Serial.println(ssid);
-    // Connect to WPA/WPA2 network:
-    status = WiFi.begin(ssid, pass);
 
-    // wait 10 seconds for connection:
+    status = WiFi.begin(ssid, pass);
     delay(10000);
   }
 
-  // you're connected now, so print out the data:
   Serial.println("You're connected to the network");
   Serial.print("SSID: ");
   Serial.println(WiFi.SSID());
@@ -54,7 +72,7 @@ bool connectShiftr() {
     Serial.println("Connecting to shiftr");
     delay(1000);
   }
-  mqtt_client.subscribe("/data");
+  mqtt_client.subscribe("/measure");
   Serial.println("Connected to shiftr");
   return true;
 }
