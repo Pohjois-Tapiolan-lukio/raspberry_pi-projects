@@ -2,7 +2,7 @@ import mysql.connector as mariadb
 from flask import Flask,request
 import json
 
-mariadb_connection = mariadb.connect(user="USERNAME", password="PASSWORD", database="viivakoodit") #Vaihda käyttäjänimi ja salasana
+mariadb_connection = mariadb.connect(user="root", password="raspberry", database="viivakoodit")
 mariadb_connection.autocommit=True
 cursor = mariadb_connection.cursor()
 app = Flask(__name__)

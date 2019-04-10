@@ -37,7 +37,7 @@ CREATE TABLE `tuotteet` (
 
 LOCK TABLES `tuotteet` WRITE;
 /*!40000 ALTER TABLE `tuotteet` DISABLE KEYS */;
-INSERT INTO `tuotteet` VALUES ('06359368509','me',0,1),('06359368551','a bag',0,1),('063593685522','the teacher',0,1),('06359368666','me',0,1),('0842776103444','Voice Kit',5999,0),('084EHSNJ700087V','a samsung touch screen display',0,1),('123','asdf',1000,16),('300492191695','ice age',0,1),('49025801633','cheap batteries',0,1),('641120017293','the snack bar',0,1),('642056012871','xylitol pastilles',0,0),('6ZS9Z82','display',0,1),('97812047710','MagPi Essentials 10',399,0),('C1MSG09KH3QF','laptop',0,1),('DMS9Z82','a good monitor',0,1),('X000AT9E6P','an arduino',0,1);
+INSERT INTO `tuotteet` VALUES ('06359368509','me',0,1),('641330173','a bag',0,1),('063593685522','the teacher',0,1),('06359368666','me',0,1),('0842776103444','Voice Kit',5999,0),('084EHSNJ700087V','a samsung touch screen display',0,1),('123','asdf',1000,16),('300492191695','ice age',0,1),('49025801633','cheap batteries',0,1),('641120017293','the snack bar',0,1),('642056012871','xylitol pastilles',0,0),('6ZS9Z82','display',0,1),('97812047710','MagPi Essentials 10',399,0),('C1MSG09KH3QF','laptop',0,1),('DMS9Z82','a good monitor',0,1),('X000AT9E6P','an arduino',0,1);
 /*!40000 ALTER TABLE `tuotteet` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

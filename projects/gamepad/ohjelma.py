@@ -20,7 +20,8 @@ with open(laite) as f:
 ser = serial.Serial(laite, baudrate=9600, timeout=1)
 
 # Luodaan valmis Re-olio
-dataRe = re.compile(r"^(\d{1,4}),(\d{1,4}),([01])$")
+#dataRe = re.compile(r"^(\d{1,4}),(\d{1,4}),([01])$")
+dataRe = re.compile(r"^(\d{1,4}),(\d{1,4}),([01]),(\d{1,4}),(\d{1,4}),([01]),([01]),([01]),([01])$")
 
 # Luodaan uinput.Device-olio nimelta gamepad
 with uinput.Device([
@@ -58,4 +59,4 @@ with uinput.Device([
         ser.close()
         print(" Ohjelma suljetaan")
 
-# vim: et ts=4 sw=4 :
+# vim: et ts=4 sw=4 

@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import iot
 
 # Kuuntele sanaa "hello", ja vastaa "Hello, world!" kun käyttäjä sanoo sen
@@ -24,6 +25,22 @@ def said_left():
 def said_right():
     iot.publish("messages","right")
     iot.say("Asking the car to move right")
+
+@iot.listen("green")
+def said_green():
+    iot.publish("messages","green")
+
+@iot.listen("red")
+def said_red():
+    iot.publish("messages","red")
+    
+@iot.listen("animation")
+def said_animation():
+    iot.publish("messages","animation")
+
+@iot.listen("no light")
+def said_nolight():
+    iot.publish("messages","nolight")
 
 @iot.listen("How are you")
 def said_How_are_you():
