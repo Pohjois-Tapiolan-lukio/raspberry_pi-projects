@@ -2,9 +2,11 @@
 IoT-apuri on kirjasto jolla saa helposti tehtyä ohjelmia jotka hyödyntävät Googlen Assistantia ääniohjaukseen, ja Shiftr.io:ta tiedonsiirtoon.
 
 ## Käyttö
-Asenna MQTT-kirjasto:
+Asenna MQTT-kirjasto ja googlen puhekirjastot:
 ```sh
 sudo pip3 install paho-mqtt
+sudo pip3 install SpeechRecognition
+sudo pip3 install google-speech
 ```
 
 ### Ohjelman pohja
