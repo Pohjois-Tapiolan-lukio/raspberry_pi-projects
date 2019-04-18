@@ -13,11 +13,11 @@ import multiprocessing
 
 import paho.mqtt.client as mqtt
 
-from google.assistant.library.event import EventType
-import aiy.assistant.auth_helpers
-from aiy.assistant.library import Assistant
-import aiy.audio
-import aiy.voicehat
+#from google.assistant.library.event import EventType
+#import aiy.assistant.auth_helpers
+#from aiy.assistant.library import Assistant
+#import aiy.audio
+#import aiy.voicehat
 
 from google_speech import Speech
 
@@ -35,10 +35,13 @@ DEBUG = False
 recognizer=sr.Recognizer()
 
 def recognize_speech():
-    with sr.Microphone() as source:
-        print("Now listening:")
-        audio = recognizer.listen(source)
-    return recognizer.recognize_google(audio)
+    try:
+        with sr.Microphone() as source:
+            print("Now listening:")
+            audio = recognizer.listen(source)
+        return recognizer.recognize_google(audio)
+    except sr.UnknownValueError:
+        return ""
 
 
 # Shiftr.io-stuff
