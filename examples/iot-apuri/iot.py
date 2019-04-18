@@ -19,6 +19,11 @@ from aiy.assistant.library import Assistant
 import aiy.audio
 import aiy.voicehat
 
+from google_speech import Speech
+
+import speech_recognition as sr
+
+
 DATA = {
     "subs": {},
     "phrases": {},
@@ -27,7 +32,17 @@ DATA = {
 
 DEBUG = False
 
+recognizer=sr.Recognizer()
+
+def recognize_speech():
+    with sr.Microphone() as source:
+        print("Now listening:")
+        audio = recognizer.listen(source)
+    return recognizer.recognize_google(audio)
+
+
 # Shiftr.io-stuff
+
 
 def run(shiftr_name=0, shiftr_key=0, shiftr_pass=0):
     """
@@ -124,12 +139,15 @@ def listen(phrase):
     return handler
 
 
-def say(message):
-    """
-    Google Assistant sanoo tekstin message-parametrissä
-    """
-    aiy.audio.say(message)
+#def say(message):
+#    """
+#    Google Assistant sanoo tekstin message-parametrissä
+#    """
+#    aiy.audio.say(message)
 
+#Muokattu say-funktio
+def say(message,lang="en-uk"):
+    Speech(message, lang).play()
 
 # Code from https://github.com/google/aiyprojects-raspbian
 # Modified for this library in various places.
