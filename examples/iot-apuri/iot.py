@@ -13,11 +13,11 @@ import multiprocessing
 
 import paho.mqtt.client as mqtt
 
-#from google.assistant.library.event import EventType
-#import aiy.assistant.auth_helpers
-#from aiy.assistant.library import Assistant
-#import aiy.audio
-#import aiy.voicehat
+from google.assistant.library.event import EventType
+import aiy.assistant.auth_helpers
+from aiy.assistant.library import Assistant
+import aiy.audio
+import aiy.voicehat
 
 from google_speech import Speech
 
