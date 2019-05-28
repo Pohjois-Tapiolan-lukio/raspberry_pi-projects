@@ -12,6 +12,7 @@ try:
         print('Found in serial: ' + serial_in)
         if 'ping' in serial_in:
             ser.write(b'pong')
+            #ser.write(b'\n')
             print('wrote into serial: pong')
         time.sleep(0.5)
 
