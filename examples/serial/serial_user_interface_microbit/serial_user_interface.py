@@ -12,10 +12,13 @@ try:
         if command == "k":
             ser.write(b'k')
             print("Lähetetään seriaalin tieto: k=kytke")
-            #serial_in = str(sio.readline())
-        elif command = "s":
+            serial_in = str(sio.readline())
+            print(serial_in)
+        elif command == "s":
             ser.write(b's')
             print("komento: s = sammutetaan")
+            serial_in = str(sio.readline())
+            print(serial_in)
         else:
             print("Virheellinen komento!")
         time.sleep(0.5)
