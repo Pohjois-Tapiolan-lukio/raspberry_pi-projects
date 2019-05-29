@@ -2,7 +2,7 @@
 
 
 
-#**Python perusteiden harjoituksia**
+# **Python perusteiden harjoituksia**
 
 Tehtävissä harjoitellaan tulostamista, input- syötettä, muuttujien käyttöä, valintaa, toistoa, listoja ja funktioita.  Tehtävien vastaukset ovat myös saatavilla.
 
