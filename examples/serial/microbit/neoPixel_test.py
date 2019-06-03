@@ -1,22 +1,22 @@
 # Write your code here :-)
 from microbit import *
 import neopixel
-import math
+#import math
 import time
 
 num_pixels = 24
 pixels = neopixel.NeoPixel(pin0, num_pixels)
 
-
+# Easy function for updating red , green, blue -values
 def update_pixels(r, g, b):
     global pixels
     for i in range(24):
         pixels[i]=(r, g, b)
-        sleep(50)
+        sleep(10)
         pixels.show()
 
 
-
+# wheel function
 def wheel(pos):
     # Input a value 0 to 255 to get a color value.
     # The colours are a transition r - g - b - back to r.
@@ -38,7 +38,7 @@ def wheel(pos):
         b = int(255 - pos*3)
     return (r, g, b)
 
-
+# rainbow animation
 def rainbow_cycle(wait):
     global num_pixels
     for j in range(255):
@@ -65,6 +65,7 @@ def bounce(r, g, b, wait):
 #cycle animation
 def cycle(r, g, b, wait):
     global pixels
+    global num_pixels
     for i in range(num_pixels):
         for j in range(num_pixels):
             pixels[j] = (0, 0, 0)
@@ -72,7 +73,29 @@ def cycle(r, g, b, wait):
         pixels.show()
         time.sleep_ms(wait)
 
+# Almost same as update pixels
+def colorWipe(r, g, b, wait):
+    global pixels
+    global pixes
+    for j in range(num_pixels):
+        pixels[j] = (r, g, b)
+        pixels.show()
+        time.sleep_ms(wait)
+
+# rainbow function goes through colors
+def rainbow(wait):
+    global num_pixels
+    global pixels
+    for j in range(255):
+        for i in range(num_pixels):
+            idx = int(i + j)
+            pixels[i] = wheel(idx & 255)
+            pixels.show()
+        time.sleep_ms(wait)
+
+
 while True:
+
     update_pixels(32,32,32) # white
     time.sleep(2)
     update_pixels(255, 0, 0) # red
@@ -84,7 +107,11 @@ while True:
     update_pixels(0, 0, 255) # blue
     time.sleep(2)
 
-    rainbow_cycle(20)    # rainbow cycle with 20 ms delay per step
+
+    rainbow(50)
+    colorWipe(0, 255,0, 100) # r,g,b-values and wait 100 ms
+
+    rainbow_cycle(10)    # rainbow cycle with 10 ms delay. scan all colors
 
     bounce(255, 0, 0, 200) # r, g, b values and wait 200 ms.
 
