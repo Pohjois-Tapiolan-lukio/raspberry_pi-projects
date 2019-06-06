@@ -49,7 +49,9 @@ void loop() {
 
   mqtt_client.loop();
 
-  mqtt_client.connected() || connectShiftr();
+  if(!mqtt_client.connected()){
+    connectShiftr();
+  }
 }
 
 bool connectShiftr() {
